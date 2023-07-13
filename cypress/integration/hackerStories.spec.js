@@ -106,7 +106,7 @@ describe('Hacker Stories', () => {
         .should('be.visible')
     })
 
-    it.only('types and clicks the submit button', () => {
+    it('types and clicks the submit button', () => {
       cy.get('#search')
         .type(newTerm)
       cy.contains('Submit')
@@ -123,17 +123,18 @@ describe('Hacker Stories', () => {
     })
 
     context('Last searches', () => {
-      it('searches via the last searched term', () => {
+      it.only('searches via the last searched term', () => {
         cy.get('#search')
           .type(`${newTerm}{enter}`)
 
-        cy.assertLoadingIsShownAndHidden()
+        cy.wait('@getNewTermStories')
 
         cy.get(`button:contains(${initialTerm})`)
           .should('be.visible')
           .click()
 
-        cy.assertLoadingIsShownAndHidden()
+        cy.wait('@getStories')
+
 
         cy.get('.item').should('have.length', 20)
         cy.get('.item')
